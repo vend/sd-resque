@@ -27,7 +27,16 @@ class Resque:
         self.client = SimpleResqueClient(**params)
 
     def run(self):
-        return dict((name, self.client.queued(name)) for name in self.client.queues())
+        vals = dict((name, self.client.queued(name)) for name in self.client.queues())
+
+        total = 0
+        for name, val in vals.iteritems():
+            total = total + val
+
+        vals['total'] = total
+
+        return vals
+
 
 #This code is for debugging and unit testing
 if __name__ == '__main__':
